@@ -19,7 +19,7 @@ public class Main {
 
         // 3️⃣ Crear una request válida
         RegisterRequest request = RegisterRequest.builder()
-                .username("fernando")
+                .username("fernanndo")
                 .email("fernando@email.com")
                 .password("Password1")
                 .build();
