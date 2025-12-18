@@ -3,34 +3,52 @@ package org.laboratoriojava;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import org.laboratoriojava.service.LoginResult;
+import org.laboratoriojava.service.LoginService;
 import org.laboratoriojava.service.RegisterService;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // 1️⃣ Arrancar JPA
+        // 1️⃣ Crear el EntityManagerFactory (UNA sola vez)
         EntityManagerFactory emf =
                 Persistence.createEntityManagerFactory("laboratorioPU");
+
+        // 2️⃣ Crear el EntityManager
         EntityManager em = emf.createEntityManager();
 
-        // 2️⃣ Crear el servicio
+        // 3️⃣ Servicios
         RegisterService registerService = new RegisterService(em);
+        LoginService loginService = new LoginService(em);
 
-        // 3️⃣ Crear una request válida
-        RegisterRequest request = RegisterRequest.builder()
-                .username("fernanndo")
+        // 4️⃣ Registro
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .username("fernando")
                 .email("fernando@email.com")
                 .password("Password1")
                 .build();
 
-        // 4️⃣ Ejecutar el registro
-        RegisterResult result = registerService.register(request);
+        RegisterResult registerResult =
+                registerService.register(registerRequest);
 
-        // 5️⃣ Ver el resultado
         System.out.println(
-                "SUCCESS: " + result.isSuccess() +
-                        " | MESSAGE: " + result.getMessage()
+                "REGISTER -> SUCCESS: " + registerResult.isSuccess() +
+                        " | MESSAGE: " + registerResult.getMessage()
+        );
+
+        // 5️⃣ Login
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email("fernando@email.com")
+                .password("Password1")
+                .build();
+
+        LoginResult loginResult =
+                loginService.login(loginRequest);
+
+        System.out.println(
+                "LOGIN -> SUCCESS: " + loginResult.isSuccess() +
+                        " | MESSAGE: " + loginResult.getMessage()
         );
 
         // 6️⃣ Cerrar recursos
